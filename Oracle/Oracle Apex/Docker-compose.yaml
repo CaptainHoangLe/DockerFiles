@@ -1,0 +1,39 @@
+--- 
+version: "3.9"
+
+services: 
+  application-express: 
+    container_name: apex
+    depends_on: 
+      - oracle-database
+    environment: 
+      - DB_HOSTNAME=oracle-database
+      - DB_PORT=1521
+      - DB_SERVICE=apex
+      - DBA_USER=sys
+      - DBA_PASSWORD=Admin123
+      - APEX_ADMIN_PASSWORD='P@ssWord123!'
+    image: thuphuong/oracle-apex
+    networks: 
+      - oracle
+    ports: 
+      - "8080:8080"
+    volumes: 
+      - "oracle-data:/opt/ords"
+  oracle-database: 
+    environment: 
+      - ORACLE_SID=VERSATICA
+      - ORACLE_PDB=apex
+      - ORACLE_PWD=Admin123
+    image: thuphuong/oracle-database
+    networks: 
+      - oracle
+    ports: 
+      - "1521:1521"
+    volumes: 
+      - "oracle-data:/opt/oracle/oradata"
+      
+volumes:
+  oracle-data:
+networks:
+  oracle:
